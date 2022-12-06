@@ -3,6 +3,7 @@ package com.example.ideplugin.project;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
 public class ShowAction extends AnAction {
@@ -13,7 +14,8 @@ public class ShowAction extends AnAction {
             return;
         }
         AppService service = ApplicationManager.getApplication().getService(AppService.class);
-        service.display();
+        Project project = e.getProject();
+        service.display(project);
     }
 
     @Override

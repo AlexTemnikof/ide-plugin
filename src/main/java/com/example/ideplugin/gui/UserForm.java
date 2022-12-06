@@ -2,6 +2,7 @@ package com.example.ideplugin.gui;
 
 import com.example.ideplugin.project.AppService;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.project.Project;
 
 import java.awt.* ;
 import java.awt.event.ActionEvent;
@@ -15,7 +16,7 @@ public class UserForm extends JFrame {
 
     JTextField typingArea;
 
-    public UserForm() {
+    public UserForm(Project project) {
         super() ;
         setTitle( "Select File" );
         setContentPane(new MyPanel());
@@ -28,7 +29,8 @@ public class UserForm extends JFrame {
             public void actionPerformed(ActionEvent e) {
 
                 // Execute when button is pressed
-                typingArea.getText();
+                ApplicationManager.getApplication().getService(AppService.class).findAndAddFile(typingArea.getText(), project);
+                dispose();
             }
         });
         this.add(typingArea);
@@ -68,7 +70,7 @@ public class UserForm extends JFrame {
         }
     }
 
-    public static void main() {
-        new UserForm();
+    public static void main(Project project) {
+        new UserForm(project);
     }
 }
