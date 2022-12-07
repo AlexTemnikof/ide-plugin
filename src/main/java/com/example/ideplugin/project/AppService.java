@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -20,15 +21,19 @@ import java.util.Random;
 @Service
 public final class AppService {
 
-    public void findAndAddFile(String path, Project project){
+    public void findAndAddFile(String path, Project project) throws IOException {
         File file = new File(path);
         if (!file.exists()){
             return;
         }
         String name = file.getName();
         String d = project.getBasePath();
+        File theDir = new File(d + "\\resources");
+        if (!theDir.exists()){
+            theDir.mkdirs();
+        }
         String s = d + "\\resources\\" + name;
-        file.renameTo(new File(d + "/resources/" + name));
+        Files.move(Paths.get(path), Paths.get(s));
     }
 
     public BufferedImage getRandomBackground(){

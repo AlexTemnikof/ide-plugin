@@ -7,6 +7,7 @@ import com.intellij.openapi.project.Project;
 import java.awt.* ;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.* ;
 
@@ -29,7 +30,11 @@ public class UserForm extends JFrame {
             public void actionPerformed(ActionEvent e) {
 
                 // Execute when button is pressed
-                ApplicationManager.getApplication().getService(AppService.class).findAndAddFile(typingArea.getText(), project);
+                try {
+                    ApplicationManager.getApplication().getService(AppService.class).findAndAddFile(typingArea.getText(), project);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
                 dispose();
             }
         });
