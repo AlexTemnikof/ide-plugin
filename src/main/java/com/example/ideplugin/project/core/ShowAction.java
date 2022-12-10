@@ -1,5 +1,6 @@
-package com.example.ideplugin.project;
+package com.example.ideplugin.project.core;
 
+import com.example.ideplugin.project.Services.AppService;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;

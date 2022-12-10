@@ -1,6 +1,7 @@
-package com.example.ideplugin.gui;
+package com.example.ideplugin.gui.form;
 
-import com.example.ideplugin.project.AppService;
+import com.example.ideplugin.gui.tools.ButtonCreate;
+import com.example.ideplugin.project.Services.AppService;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 
@@ -8,39 +9,18 @@ import java.awt.* ;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.List;
 
 import javax.swing.* ;
 
-import static javax.swing.BoxLayout.X_AXIS;
-
 public class UserForm extends JFrame {
 
-    JTextField typingArea;
-
-    public UserForm(Project project) {
-        super() ;
+    public UserForm() {
+        super();
         setTitle( "Select File" );
         setContentPane(new MyPanel());
-        typingArea = new JTextField();
-        typingArea.setBounds(700, 500, 150, 27);
-        JButton button = new JButton("Submit");
-        button.setBounds(900, 500, 180, 27);
-        button.addActionListener(new ActionListener() {
 
-            public void actionPerformed(ActionEvent e) {
-
-                // Execute when button is pressed
-                try {
-                    ApplicationManager.getApplication().getService(AppService.class).findAndAddFile(typingArea.getText(), project);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-                dispose();
-            }
-        });
-        this.add(typingArea);
         this.add(new JLabel());
-        this.add(button);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setVisible( true ) ;
     }
@@ -76,6 +56,6 @@ public class UserForm extends JFrame {
     }
 
     public static void main(Project project) {
-        new UserForm(project);
+        new UserForm();
     }
 }
