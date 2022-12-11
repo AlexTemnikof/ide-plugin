@@ -1,6 +1,7 @@
 package com.example.ideplugin.gui.tools;
 
 import com.example.ideplugin.project.Services.AppService;
+import com.example.ideplugin.project.entities.FileEntity;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.Service;
 
@@ -8,14 +9,12 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
 public class ButtonCreate {
 
-    public List<JButton> createButton(){
+    public static List<JButton> createButton(List<FileEntity> list){
         List<JButton> buttons = new ArrayList<>();
-        List<String> names = ApplicationManager.getApplication().getService(AppService.class).getDirectory(System.getProperty("user.home"));
-        for (String str : names){
-            JButton but = new JButton(str);
+        for (FileEntity f : list){
+            JButton but = new JButton(f.getName());
             buttons.add(but);
         }
         return buttons;

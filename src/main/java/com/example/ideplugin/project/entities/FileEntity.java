@@ -18,8 +18,13 @@ public class FileEntity {
         this.absolutePath = absolutePath;
     }
 
+    public String getName(){
+        return name;
+    }
+
     private String parseName(String absolutePath){
-        // todo: implement
-        return " ";
+        String[] parts = absolutePath.split("\\\\");
+        String temp = parts[parts.length - 1];
+        return temp.substring(0, temp.indexOf("."));
     }
 }

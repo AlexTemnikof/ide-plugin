@@ -11,8 +11,16 @@ public class DirectoryEntity {
         name = parseName(path);
     }
 
+    public String getName(){
+        return name;
+    }
+
+    public String getAbsolutePath(){
+        return absolutePath;
+    }
     private String parseName(String path){
-        // todo: implement
-        return "";
+        String[] parts = path.split("\\\\");
+        String temp = parts[parts.length - 1];
+        return temp.substring(0, temp.indexOf("."));
     }
 }

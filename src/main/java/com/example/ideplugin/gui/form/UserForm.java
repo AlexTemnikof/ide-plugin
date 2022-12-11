@@ -2,19 +2,17 @@ package com.example.ideplugin.gui.form;
 
 import com.example.ideplugin.gui.tools.ButtonCreate;
 import com.example.ideplugin.project.Services.AppService;
+import com.example.ideplugin.project.entities.FileEntity;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 
 import java.awt.* ;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.util.List;
-
 import javax.swing.* ;
+import java.util.List;
 
 public class UserForm extends JFrame {
 
+    //todo: implement
     public UserForm() {
         super();
         setTitle( "Select File" );
@@ -55,7 +53,8 @@ public class UserForm extends JFrame {
         }
     }
 
-    public static void main(Project project) {
+    public static void main(Project project, List<FileEntity> list) {
+        List<JButton> buttons = ButtonCreate.createButton(list);
         new UserForm();
     }
 }
