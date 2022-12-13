@@ -1,12 +1,18 @@
 package com.example.ideplugin.project.entities;
 
-public class DirectoryEntity {
+public class DirectoryEntity extends Entity {
     String parentDirPath;
     String absolutePath;
     String name;
 
     public DirectoryEntity(String parentPath, String path){
         parentDirPath = parentPath;
+        absolutePath = path;
+        name = parseName(path);
+    }
+
+    public DirectoryEntity(String path){
+        parentDirPath = null;
         absolutePath = path;
         name = parseName(path);
     }
@@ -18,9 +24,12 @@ public class DirectoryEntity {
     public String getAbsolutePath(){
         return absolutePath;
     }
+
+    public String getParentDirPath(){
+        return parentDirPath;
+    }
     private String parseName(String path){
         String[] parts = path.split("\\\\");
-        String temp = parts[parts.length - 1];
-        return temp.substring(0, temp.indexOf("."));
+        return parts[parts.length - 1];
     }
 }

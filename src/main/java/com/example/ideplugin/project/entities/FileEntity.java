@@ -2,7 +2,7 @@ package com.example.ideplugin.project.entities;
 
 import java.io.File;
 
-public class FileEntity {
+public class FileEntity extends Entity {
     boolean isDirectory;
     String absolutePath;
     String name;
@@ -20,6 +20,10 @@ public class FileEntity {
 
     public String getName(){
         return name;
+    }
+
+    public String getAbsolutePath(){
+        return absolutePath;
     }
 
     private String parseName(String absolutePath){

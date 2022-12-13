@@ -7,6 +7,8 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+
 public class ShowAction extends AnAction {
 
     @Override
@@ -16,7 +18,11 @@ public class ShowAction extends AnAction {
         }
         AppService service = ApplicationManager.getApplication().getService(AppService.class);
         Project project = e.getProject();
-        service.display(project);
+        try {
+            service.display(project);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     @Override

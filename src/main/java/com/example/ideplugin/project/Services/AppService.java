@@ -2,6 +2,7 @@ package com.example.ideplugin.project.Services;
 
 import com.example.ideplugin.gui.form.UserForm;
 import com.example.ideplugin.project.entities.DirectoryEntity;
+import com.example.ideplugin.project.entities.Entity;
 import com.example.ideplugin.project.entities.FileEntity;
 import com.intellij.openapi.components.Service;
 import com.intellij.openapi.project.Project;
@@ -13,12 +14,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public final class AppService {
@@ -26,8 +23,14 @@ public final class AppService {
     DirectoryEntity directory;
     Project project;
 
+    List<Entity> entities;
+
     public AppService(){
         directory = new DirectoryEntity(null, System.getProperty("user.home"));
+    }
+
+    public void clickEvent(){
+
     }
     public void findAndAddFile(String path, Project project) throws IOException {
         File file = new File(path);
@@ -44,20 +47,19 @@ public final class AppService {
         Files.move(Paths.get(path), Paths.get(s));
     }
 
-    public List<FileEntity> getDirectory(String dirPath) throws IOException {
-        List<FileEntity> entities = new ArrayList<>();
+    public List<Entity> getDirectory(String dirPath) throws IOException {
+        List<Entity> entities = new ArrayList<>();
         File dir = new File(dirPath);
         if (!dir.isDirectory()){
             // todo: display failure form
             return null;
         }
-        DirectoryEntity directoryEntity = new DirectoryEntity(directory.getAbsolutePath(), dirPath);
-        List<String> filesInFolder = Files.walk(Paths.get(dirPath))
-                .filter(Files::isRegularFile)
-                .map(Path:: toString)
-                .collect(Collectors.toList());
-        for (String s : filesInFolder){
-            FileEntity file = new FileEntity(s);
+        List<String> arrFiles = Arrays.asList(Objects.requireNonNull(dir.list()));
+        for (String s : arrFiles){
+            if (Files.isDirectory(Paths.get(s))){
+                DirectoryEntity file = new DirectoryEntity(s);
+            }
+            FileEntity file = new FileEntity(dirPath + "\\" + s);
             entities.add(file);
         }
 
@@ -83,8 +85,22 @@ public final class AppService {
 
     }
 
-    public void display(Project project){
+    public void display(Project project) throws IOException {
         // todo: implement choice of the form
         this.project = project;
+        entities = this.getDirectory(directory.getAbsolutePath());
+
+        UserForm.main(entities);
+    }
+
+    public void displayUserForm(String path) throws IOException {
+        DirectoryEntity dir = new DirectoryEntity(directory.getAbsolutePath(), path);
+        this.directory = dir;
+        entities = this.getDirectory(directory.getAbsolutePath());
+        UserForm.main(entities);
+    }
+
+    private void displayFailureForm(){
+        //todo: implement
     }
 }
