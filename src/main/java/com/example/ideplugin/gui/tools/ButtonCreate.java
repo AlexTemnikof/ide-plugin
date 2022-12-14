@@ -16,6 +16,7 @@ public class ButtonCreate {
         List<JButton> buttons = new ArrayList<>();
         for (Entity f : list){
             JButton but = new JButton(f.getName());
+            f.setButton(but);
             buttons.add(but);
         }
         return buttons;

@@ -1,11 +1,13 @@
 package com.example.ideplugin.project.entities;
 
+import javax.swing.*;
 import java.io.File;
 
 public class FileEntity extends Entity {
-    boolean isDirectory;
     String absolutePath;
     String name;
+
+    JButton button;
 
     public FileEntity(String absolutePath){
         if (absolutePath == null){
@@ -13,7 +15,6 @@ public class FileEntity extends Entity {
             return;
         }
         File file = new File(absolutePath);
-        isDirectory = file.isDirectory();
         name = parseName(absolutePath);
         this.absolutePath = absolutePath;
     }
@@ -26,9 +27,16 @@ public class FileEntity extends Entity {
         return absolutePath;
     }
 
+    public JButton getButton(){
+        return button;
+    }
+
+    public void setButton(JButton but){
+        button = but;
+    }
+
     private String parseName(String absolutePath){
         String[] parts = absolutePath.split("\\\\");
-        String temp = parts[parts.length - 1];
-        return temp.substring(0, temp.indexOf("."));
+        return parts[parts.length - 1];
     }
 }

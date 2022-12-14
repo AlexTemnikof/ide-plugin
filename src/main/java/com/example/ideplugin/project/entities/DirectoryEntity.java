@@ -1,9 +1,13 @@
 package com.example.ideplugin.project.entities;
 
+import javax.swing.*;
+
 public class DirectoryEntity extends Entity {
     String parentDirPath;
     String absolutePath;
     String name;
+
+    JButton button;
 
     public DirectoryEntity(String parentPath, String path){
         parentDirPath = parentPath;
@@ -27,6 +31,14 @@ public class DirectoryEntity extends Entity {
 
     public String getParentDirPath(){
         return parentDirPath;
+    }
+
+    public JButton getButton(){
+        return button;
+    }
+
+    public void setButton(JButton but){
+        button = but;
     }
     private String parseName(String path){
         String[] parts = path.split("\\\\");

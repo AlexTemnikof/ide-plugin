@@ -3,9 +3,7 @@ package com.example.ideplugin.gui.form;
 import com.example.ideplugin.gui.tools.ButtonCreate;
 import com.example.ideplugin.project.Services.AppService;
 import com.example.ideplugin.project.entities.Entity;
-import com.example.ideplugin.project.entities.FileEntity;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.project.Project;
 
 import java.awt.* ;
 import javax.swing.* ;
@@ -20,18 +18,30 @@ public class UserForm extends JFrame {
         super();
         setTitle( "Select File" );
         setContentPane(new MyPanel());
+
+        JButton backButton = new JButton("Назад");
+        backButton.setBounds(100, 300, 300, 50);
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ApplicationManager.getApplication().getService(AppService.class).clickEvent();
+                dispose();
+            }
+        });
         for (JButton but : buttons){
             but.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-
+                    ApplicationManager.getApplication().getService(AppService.class).clickEvent(e.getSource());
+                    dispose();
                 }
             } );
         }
-
+        int i = 100;
         for (JButton b : buttons){
+            b.setBounds(600, i, 300, 50);
             this.add(b);
+            i+= 50;
         }
-
         this.add(new JLabel());
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setVisible( true ) ;
@@ -67,8 +77,7 @@ public class UserForm extends JFrame {
         }
     }
 
-    public static void main(List<Entity> list) {
-        List<JButton> buttons = ButtonCreate.createButton(list);
+    public static void main(List<JButton> buttons) {
         new UserForm(buttons);
     }
 }

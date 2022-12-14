@@ -1,6 +1,7 @@
 package com.example.ideplugin.project.Services;
 
 import com.example.ideplugin.gui.form.UserForm;
+import com.example.ideplugin.gui.tools.ButtonCreate;
 import com.example.ideplugin.project.entities.DirectoryEntity;
 import com.example.ideplugin.project.entities.Entity;
 import com.example.ideplugin.project.entities.FileEntity;
@@ -8,29 +9,70 @@ import com.intellij.openapi.components.Service;
 import com.intellij.openapi.project.Project;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public final class AppService {
 
-    DirectoryEntity directory;
-    Project project;
+    private DirectoryEntity directory;
+    private Project project;
 
-    List<Entity> entities;
+    private List<Entity> entities;
 
     public AppService(){
         directory = new DirectoryEntity(null, System.getProperty("user.home"));
     }
 
-    public void clickEvent(){
+    public void clickEvent(Object object){
+        if (object instanceof JButton){
+            JButton target = (JButton) object;
+            Entity tmp = null;
+            for (Entity e : entities){
+                if (e.getButton().equals(target)) {
+                    tmp = e;
+                    break;
+                }
+            }
+            if (tmp == null){
+                this.displayFailureForm();
+                return;
+            }
 
+            if (tmp.getClass() == FileEntity.class){
+                try {
+                    this.findAndAddFile(tmp.getAbsolutePath(), project);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+                this.displaySuccessForm();
+                return;
+            }
+
+            try {
+                this.display(tmp.getAbsolutePath());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        else {
+            this.displayFailureForm();
+            //todo: show failure form
+        }
+    }
+
+    public void clickEvent(){
+        try {
+            this.display(directory.getParentDirPath());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
     public void findAndAddFile(String path, Project project) throws IOException {
         File file = new File(path);
@@ -44,7 +86,7 @@ public final class AppService {
             theDir.mkdirs();
         }
         String s = d + "\\resources\\" + name;
-        Files.move(Paths.get(path), Paths.get(s));
+        Files.copy(Paths.get(path), Paths.get(s));
     }
 
     public List<Entity> getDirectory(String dirPath) throws IOException {
@@ -56,10 +98,13 @@ public final class AppService {
         }
         List<String> arrFiles = Arrays.asList(Objects.requireNonNull(dir.list()));
         for (String s : arrFiles){
-            if (Files.isDirectory(Paths.get(s))){
-                DirectoryEntity file = new DirectoryEntity(s);
+            Entity file;
+            if (Files.isDirectory(Paths.get(dirPath + "\\" + s))){
+                file = new DirectoryEntity(dirPath + "\\" + s);
             }
-            FileEntity file = new FileEntity(dirPath + "\\" + s);
+            else {
+                file = new FileEntity(dirPath + "\\" + s);
+            }
             entities.add(file);
         }
 
@@ -89,18 +134,31 @@ public final class AppService {
         // todo: implement choice of the form
         this.project = project;
         entities = this.getDirectory(directory.getAbsolutePath());
-
-        UserForm.main(entities);
+        if (entities != null) {
+            UserForm.main(ButtonCreate.createButton(entities));
+        }
+        else{
+            this.displayFailureForm();
+        }
     }
 
-    public void displayUserForm(String path) throws IOException {
+    public void display(String path) throws IOException {
         DirectoryEntity dir = new DirectoryEntity(directory.getAbsolutePath(), path);
         this.directory = dir;
         entities = this.getDirectory(directory.getAbsolutePath());
-        UserForm.main(entities);
+        if (entities != null) {
+            UserForm.main(ButtonCreate.createButton(entities));
+        }
+        else{
+            this.displayFailureForm();
+        }
     }
 
     private void displayFailureForm(){
+        //todo: implement
+    }
+
+    private void displaySuccessForm(){
         //todo: implement
     }
 }
