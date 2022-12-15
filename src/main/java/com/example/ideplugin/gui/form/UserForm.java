@@ -4,6 +4,8 @@ import com.example.ideplugin.gui.tools.ButtonCreate;
 import com.example.ideplugin.project.Services.AppService;
 import com.example.ideplugin.project.entities.Entity;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.ui.components.JBLabel;
+import com.intellij.ui.components.JBScrollPane;
 
 import java.awt.* ;
 import javax.swing.* ;
@@ -17,10 +19,11 @@ public class UserForm extends JFrame {
     public UserForm(List<JButton> buttons) {
         super();
         setTitle( "Select File" );
-        setContentPane(new MyPanel());
 
-        JButton backButton = new JButton("Назад");
-        backButton.setBounds(100, 300, 300, 50);
+        MyPanel panel = new MyPanel();
+        setContentPane(panel);
+        JButton backButton = new JButton("Back");
+        backButton.setBounds(100, 100, 200, 50);
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -36,15 +39,22 @@ public class UserForm extends JFrame {
                 }
             } );
         }
-        int i = 100;
-        for (JButton b : buttons){
-            b.setBounds(600, i, 300, 50);
-            this.add(b);
-            i+= 50;
+        JPanel p = new JPanel();
+        panel.setLayout(new GridLayout(10, 1));
+        for (JButton b : buttons) {
+            p.add(b);
         }
-        this.add(new JLabel());
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setVisible( true ) ;
+
+        JPanel container = new JPanel();
+        container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
+        container.add(p);
+        JScrollPane scrollPane = new JScrollPane(container);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        this.getContentPane().add(scrollPane);
+
+        this.pack();
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
     }
 
     public class MyPanel extends JComponent {

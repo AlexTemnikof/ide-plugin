@@ -28,8 +28,10 @@
     </extensions>
     <actions>
         <action id="com.example.ideplugin.project.core.ShowAction" class="com.example.ideplugin.project.core.ShowAction"
-                text="UserForm" description="Shows the user form which provides the ability to input data">
+                text="Add Existing File" description="Shows the user form which provides the ability to input data">
             <keyboard-shortcut keymap="$default" first-keystroke="ctrl BACK_SLASH" second-keystroke="ctrl S"/>
+            <add-to-group group-id="FileMenu" anchor="first" />
+
         </action>
     </actions>
 </idea-plugin>

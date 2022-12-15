@@ -13,9 +13,11 @@ import java.util.List;
 public class ButtonCreate {
 
     public static List<JButton> createButton(List<Entity> list){
+        ImageIcon fileIcon = new ImageIcon("icons/fileIcon.jpg");
+        Icon folderIcon = new ImageIcon("icons/folderIcon.jpg");
         List<JButton> buttons = new ArrayList<>();
         for (Entity f : list){
-            JButton but = new JButton(f.getName());
+            JButton but = new JButton(f.getName(), fileIcon);
             f.setButton(but);
             buttons.add(but);
         }
